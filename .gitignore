@@ -1,0 +1,10 @@
+# Secrets
+.env
+
+# Python Environment
+.venv/
+__pycache__/
+*.py[cod]
+
+# Poetry
+dist/
