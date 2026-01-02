@@ -4,28 +4,33 @@ from dotenv import load_dotenv
 from langgraph.graph import StateGraph, START, END
 
 from aigovern_warden.agents.scout import WardenState, run_discovery_scout
+from aigovern_warden.agents.jurist import run_policy_jurist
+from aigovern_warden.agents.architect import run_remediation_architect
+from aigovern_warden.agents.git_agent import run_github_agent
+from aigovern_warden.agents.reporter import run_reporting_agent
 
 # 1. Load configuration from .env
 load_dotenv()
 
 def build_warden_engine():
-    """
-    Architectural Step: Define the Directed Acyclic Graph (DAG).
-    This tells LangGraph the order of operations.
-    """
-    # Initialize the Graph with our State schema
     workflow = StateGraph(WardenState)
 
-    # Add Node: The 'Scout' Agent
-    # In LangGraph, a 'Node' is just a function that takes State and returns an update.
+    # Add Nodes
     workflow.add_node("discovery_scout", run_discovery_scout)
+    workflow.add_node("policy_jurist", run_policy_jurist) 
+    workflow.add_node("remediation_architect", run_remediation_architect)
+    workflow.add_node("github_agent", run_github_agent)
+    workflow.add_node("reporting_agent", run_reporting_agent)
 
-    # Define Edges: The 'Pathways'
-    # We start at START, go to our Scout, and then we are done (for now).
+    # Define the Flow (The Edge Logic)
     workflow.add_edge(START, "discovery_scout")
-    workflow.add_edge("discovery_scout", END)
+    workflow.add_edge("discovery_scout", "policy_jurist") 
+    workflow.add_edge("policy_jurist", "remediation_architect")
+    #workflow.add_edge("remediation_architect", "github_agent")
+    #workflow.add_edge("github_agent", "reporting_agent")
+    workflow.add_edge("remediation_architect", "reporting_agent")
+    workflow.add_edge("reporting_agent", END)
 
-    # Compile: This validates the graph and returns a 'Runnable' object.
     return workflow.compile()
 
 def main():

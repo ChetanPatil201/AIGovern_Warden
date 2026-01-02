@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.cognitiveservices import CognitiveServicesManagementClient
+from azure.mgmt.storage import StorageManagementClient
 
 # Load the .env variables
 load_dotenv()
@@ -36,5 +37,17 @@ def run_discovery_scout(state: WardenState) -> dict:
         # N-Series VMs are specialized for AI/GPUs
         if "standard_n" in size:
             new_findings.append(f"SHADOW_GPU: {vm.name} (Size: {size})")
+    
+    # 2. NEW: Deep Data Inspection (Article 10 Check)
+    storage_client = StorageManagementClient(credential, sub_id)
+    for account in storage_client.storage_accounts.list():
+        # We look for "unstructured" data stores likely used for training
+        if account.kind in ["StorageV2", "BlobStorage"]:
+            new_findings.append(f"DATA_STORE_FOUND: {account.name} (Risk: Potential Training Data)")
+            
+            # BIAS CHECK: Simulating metadata inspection for sensitive proxies
+            # In a real enterprise, we'd use 'Azure Purview' or 'Blob Metadata'
+            if any(term in account.name.lower() for term in ["user", "customer", "profile"]):
+                new_findings.append(f"BIAS_WARNING: Data store '{account.name}' likely contains PII/Sensitive Proxies.")
 
     return {"findings": new_findings}
