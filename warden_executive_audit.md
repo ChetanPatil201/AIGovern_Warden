@@ -1,151 +1,110 @@
-# 🛡️ AIGovern Warden: AI Compliance Audit
-**Date:** 2026-01-02 10:41:14
+# 🛡️ AIGovern Warden: Executive Audit Report
+**Date:** 2026-01-06 14:50:29
 **Target Subscription:** `1a317aed-2ae0-467e-a97d-46ea4e51f919`
-**Framework:** EU AI Act (August 2026 Enforcement)
+**Framework:** EU AI Act (August 2026 Readiness)
 
 ---
 
 ## 📊 Executive Compliance Scorecard
 | Metric | Status |
 | :--- | :--- |
-| **Total AI Assets Found** | 2 |
-| **Critical Policy Violations** | 1 |
-| **Data Sovereignty (EU Act)** | ❌ FAIL (Regional Drift) |
-| **Regulatory Risk Exposure** | High (Financial Year 2026) |
-| **Current Readiness Score** | 75% |
+| **Total Assets Analyzed** | 10 |
+| **Critical Violations (Signal 9-10)** | 5 |
+| **High-Risk/Drift (Signal 7-8)** | 1 |
+| **Readiness Score** | **0%** |
 
-### 🛑 Urgent Action Items:
-1. **Remediate Regional Drift:** Move non-compliant resources to 'westus' (Sovereign Zone).
-2. **Technical Documentation:** Generate Article 11 technical files for all detected LLMs.
-3. **Registry Update:** Discovered resources must be added to the High-Risk AI Registry.
+> **Architect's Note:** This score is derived via deterministic extraction. 
+> A score of **0%** reflects **6** assets requiring immediate intervention.
 
 ---
-
 ## 🔍 Detailed Audit Findings
+'```json
+[
+  {
+    "Resource": "cp-azureopenai",
+    "Signal Strength": 9,
+    "Verdict": "Categorical",
+    "Legal Citation": "Article 10, Article 11",
+    "Reasoning": "Explicit AI service detected with \'DRIFT_DETECTED\'. Strong correlation with Articles 10 and 11, which require data governance and documentation. No systemic risk indicated, but resources lack access control and metadata clarity."
+  },
+  {
+    "Resource": "cp-aoi-fnd-svc",
+    "Signal Strength": 9,
+    "Verdict": "Categorical",
+    "Legal Citation": "Article 10, Article 11",
+    "Reasoning": "Explicit AI service with \'DRIFT_DETECTED\'. Suggestive violation of Articles 10 and 11 due to lack of access to deployment metadata and systemic data governance concerns. No explicit systemic risk."
+  },
+  {
+    "Resource": "SDS-LLM",
+    "Signal Strength": 9,
+    "Verdict": "Categorical",
+    "Legal Citation": "Article 10, Article 11",
+    "Reasoning": "Explicit AI service directly identified. \'DRIFT_DETECTED\' and absence of metadata strongly suggest violations under Articles 10 and 11 regarding documentation and dataset compliance. No systemic risk indicated."
+  },
+  {
+    "Resource": "AIBOTING",
+    "Signal Strength": 9,
+    "Verdict": "Categorical",
+    "Legal Citation": "Article 10, Article 11",
+    "Reasoning": "AI service flagged with \'DRIFT_DETECTED\' status and lacking deployment metadata. Strong correlation with Articles 10 and 11 requiring high-risk AI systems to maintain robust governance and documentation standards."
+  },
+  {
+    "Resource": "CityScan-Public-Biometrics",
+    "Signal Strength": 10,
+    "Verdict": "Categorical",
+    "Legal Citation": "Article 5",
+    "Reasoning": "The resource \'CityScan-Public-Biometrics\' indicates biometric AI in public spaces for law enforcement—a practice explicitly banned under Article 5. This constitutes a prohibited AI practice with a systemic breach."
+  },
+  {
+    "Resource": "avdingramfslogixstg",
+    "Signal Strength": 4,
+    "Verdict": "Potential",
+    "Legal Citation": "N/A",
+    "Reasoning": "Data storage with public access enabled, suggests potential data governance gaps. Requires further documentation to confirm compliance with Article 10. Signal is weaker due to the generic nature of the asset."
+  },
+  {
+    "Resource": "funcappstoragesom",
+    "Signal Strength": 4,
+    "Verdict": "Potential",
+    "Legal Citation": "N/A",
+    "Reasoning": "Publicly accessible data store hints at possible data governance issues but lacks explicit AI indicators. Documentation is necessary to establish compliance with Article 10."
+  },
+  {
+    "Resource": "stgterraformtfstate",
+    "Signal Strength": 4,
+    "Verdict": "Potential",
+    "Legal Citation": "N/A",
+    "Reasoning": "Generic public storage asset with suggestive metadata (\'terraform\'). Requires review of associated documentation to determine alignment with Article 10."
+  },
+  {
+    "Resource": "storagedatadiskfatcat",
+    "Signal Strength": 4,
+    "Verdict": "Potential",
+    "Legal Citation": "N/A",
+    "Reasoning": "Publicly accessible storage with ambiguous connection to AI operations but indicative of a potential governance gap under Article 10."
+  },
+  {
+    "Resource": "nsg-ai-training-public",
+    "Signal Strength": 7,
+    "Verdict": "Categorical",
+    "Legal Citation": "Article 10",
+    "Reasoning": "Network security group allowing public SSH access (port 22) constitutes a potential security risk for AI-related environments. Elevated security gaps conflict with Article 10\'s expectations for governance."
+  }
+]
+``` 
 
-### Finding #1
-### **Gap Analysis and Financial Penalty Risk**
-
-**1. Regulation Benchmark Analysis (EU AI Act 2026)**  
-
-The findings call attention to potential gaps in regulatory compliance under the EU AI Act of 2026. Below is the assessment for each applicable Article based on your findings:  
-
----
-
-#### **ARTICLE 10 (Bias)**
-- **Key Requirement:** High-risk systems must utilize quality datasets that are representative, accurate, and free of bias. If 'BIAS_WARNING' is detected, the system is deemed **NON-COMPLIANT**.
-  
-  - **Observation:**  
-    No explicit ‘BIAS_WARNING’ was flagged in this set of findings. However, the extensive number of potential training data sources (**Data_Store_Found**) raises significant risks regarding dataset quality assurance and potential bias propagation.  
-    - Risk: Data stores likely include sensitive or unverified data that could introduce bias during model training.  
-    - Mitigation Gap: No documented mechanism mentioned in the findings to verify dataset diversity, error rates, or bias mitigation strategies for flagged data stores.  
-
-  - **Violation Risk Summary:**  
-    No immediate financial penalty due to absence of ‘BIAS_WARNING’ in findings, but further review of dataset quality measures is paramount to ensure compliance.  
----
-
-#### **ARTICLE 11 (Documentation)**
-- **Key Requirement:** Every AI system must maintain an 'Annex IV' dossier, including information about the dataset, intended purpose, design specifications, and risk mitigation strategies.  
-  - Flagged Issues:  
-    - **SDS-LLM**: No mention of an 'Annex IV' dossier being available. This system is flagged as a **priority** due to its reliance on potentially sensitive or high-risk training data (as inferred from findings across data stores).
-
-  - Additional Areas of Concern:  
-    If similar services like `cp-azureopenai`, `cp-aoi-fnd-svc`, and `AIBOTING` also lack comprehensive documentation, these may represent further points of regulatory weakness.
-
-  - Financial Penalty Risk:  
-    - **Violation of Article 11** due to lack of adequate documentation can result in **non-compliance with Annex IV requirements**.
-    - Penalty Risk: Up to **7% of annual turnover**.
-
-  - Actionable Recommendation for Immediate Remediation:  
-    Ensure the **Annex IV dossier** or equivalent documentation exists for each identified AI system, *starting with SDS-LLM*. Focus on dataset origin, validation, safeguards, and transparency methods per EU AI Act Article 11 requirements.
-
----
-
-#### **ARTICLE 14 (Human Oversight)**
-- **Key Requirement:** AI systems need to document and function with mechanisms for human oversight throughout their operation, ensuring compliance through remediation platforms like GitHub for audit trails.  
-  - **Observation:**  
-    There is no explicit violation flagged for failing Article 14 in the findings. However, a potential action plan for rectifying compliance lapses (if any) via GitHub Pull Requests is a good indicator of procedural alignment with human-in-the-loop design principles.
-
----
-
----
-
-## **Financial Penalty Risk Assessment**  
-
-### **Primary Violation:**  
-**ARTICLE 11 – Lack of Annex IV Documentation**  
-- SDS-LLM and potentially other AI systems (e.g., `cp-azureopenai`, `cp-aoi-fnd-svc`, `AIBOTING`) fail to demonstrate documentation compliance.  
-
-### **Penalty Formula:**  
-Per EU AI Act, financial penalties may reach up to 7% of global turnover for non-compliance.  
-
-**Steps to Estimate Risk:**
-1. Determine **Annual Turnover** of the responsible organization.  
-   Example: Annual Turnover = €1 billion.  
-2. Apply **7% Penalty** for Article 11 violation.  
-   Financial Risk: €1,000,000,000 x 7% = **€70 million**.  
-
-### **Secondary Risks:**
-- GPA/growing regulatory scrutiny due to potential **Article 10 violations** linked to dataset bias if mechanisms are not implemented to audit and de-bias training datasets.  
-
----
-
----
-
-## **Remediation Recommendations:**
-1. **Document Review and Creation:**
-   - Prioritize the creation of 'Annex IV dossiers' starting with **SDS-LLM**. Extend this to `cp-azureopenai`, `cp-aoi-fnd-svc`, and `AIBOTING`.
-   - Include details on dataset origins, data preprocessing methods, bias mitigation measures, and safety protocols.
-
-2. **Dataset Audit for Article 10 Compliance:**
-   - Conduct a complete **bias analysis** on the datasets associated with each AI system.
-   - Assess and verify the flagged **Data_Store_Found** entries for sensitive or non-compliant training data. Remove or remediate data that introduces avoidable risks.
-
-3. **Human Oversight Mechanisms:**
-   - Establish an **audit trail using GitHub Pull Requests** to ensure transparency and human-in-the-loop oversight in model and system updates.
-
-4. **Stakeholder Engagement:**
-   - Work closely with data protection officers, ethical AI committees, and engineering leads to align with EU AI Act requirements before the 2026 enforcement deadline.
-
-
-
-### Finding #2
 
 ### PROPOSED TERRAFORM FIX:
 ```hcl
-provider "azurerm" {
-  features {}
-  location = "eastus"
-}
-
-resource "azurerm_resource_group" "example" {
-  name     = "example-resource-group"
-  location = "eastus"
-}
-
-resource "azurerm_cognitive_account" "example" {
-  name                = "example-cog-account-eastus"
-  resource_group_name = azurerm_resource_group.example.name
-  location            = azurerm_resource_group.example.location
+resource "azurerm_cognitive_account" "cp_azureopenai_westus" {
+  name                = "cp-azureopenai-westus"
+  resource_group_name = "example-resource-group"
+  location            = "westus"
   kind                = "OpenAI"
   sku_name            = "S0"
-}
 
-# Recreate in westus
-provider "azurerm" {
-  features {}
+  tags = {
+    Environment = "Production"
+  }
 }
-
-resource "azurerm_resource_group" "westus" {
-  name     = "example-resource-group-westus"
-  location = "westus"
-}
-
-resource "azurerm_cognitive_account" "westus" {
-  name                = "example-cog-account-westus"
-  resource_group_name = azurerm_resource_group.westus.name
-  location            = azurerm_resource_group.westus.location
-  kind                = "OpenAI"
-  sku_name            = "S0"
-}
-``` 
+```'

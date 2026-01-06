@@ -1,0 +1,4 @@
+[REF-05] ARTICLE 5: PROHIBITED AI PRACTICES - Systems using subliminal techniques or social scoring are strictly banned. Biometric ID in public spaces for law enforcement is prohibited.
+[REF-10] ARTICLE 10: DATA GOVERNANCE - High-risk systems must use datasets that are relevant, representative, and free of errors.
+[REF-11] ARTICLE 11: TECHNICAL DOCUMENTATION - Mandatory dossiers must be created before placing a system on the market.
+[REF-14] ARTICLE 14: HUMAN OVERSIGHT - Systems must be designed so they can be effectively overseen by natural persons.
