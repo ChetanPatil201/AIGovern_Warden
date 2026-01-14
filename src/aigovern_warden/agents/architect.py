@@ -4,9 +4,10 @@ from aigovern_warden.agents.scout import WardenState
 
 def run_remediation_architect(state: WardenState) -> dict:
     """
-    Agent 3: Generates Terraform code to fix compliance issues.
+    Agent 3: Generates both Terraform migration code and mandatory 
+    Annex IV Technical Dossiers for Article 11 compliance.
     """
-    print("--- [AGENT] Architect: Generating Terraform Remediation ---")
+    print("--- [AGENT] Architect: Generating Multi-Layer Remediation ---")
     
     llm = AzureChatOpenAI(
         azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
@@ -14,24 +15,26 @@ def run_remediation_architect(state: WardenState) -> dict:
         openai_api_key=os.getenv("AZURE_OPENAI_KEY"),
         openai_api_version="2024-02-01",
     )
-    # We take the findings (which now contain the Jurist's audit)
+    
     audit_report = "\n".join(state["findings"])
 
     prompt = f"""
-    You are a Senior Cloud Engineer and Terraform Expert.
-    
-    Based on this Audit Report:
+    You are a Senior AI Compliance Engineer. 
+    Review these high-risk findings (Signal >= 7):
     {audit_report}
     
-    Your Task:
-    1. For any resource in 'eastus', generate a Terraform snippet to recreate it in 'westus'.
-    2. Use the 'azurerm_cognitive_account' resource type.
-    3. Ensure the 'kind' is 'OpenAI' and the 'sku_name' is 'S0'.
+    REMEDIATION TASK:
+    1. TERRAFORM: Provide code to migrate 'eastus' resources to 'westus'.
+    2. ARTICLE 11 COMPLIANCE: For any system with Signal >= 7 (e.g., SDS-LLM, AIBOTING), 
+       generate a 'MANDATORY ANNEX IV TECHNICAL DOSSIER' outline.
+    3. INCLUDE: Purpose, Model logic, and Article 14 Human Oversight mechanisms.
     
-    Return ONLY the Terraform code wrapped in markdown code blocks.
+    Format findings as: 
+    ### 🏗️ TERRAFORM REMEDIATION
+    [Code]
+    ### 📄 ARTICLE 11 TECHNICAL DOSSIER
+    [Dossier Content]
     """
 
     response = llm.invoke(prompt)
-    
-    # We append the Terraform code to our findings
-    return {"findings": state["findings"] + ["\n### PROPOSED TERRAFORM FIX:\n" + response.content]}
+    return {"findings": state["findings"] + ["\n" + response.content]}
